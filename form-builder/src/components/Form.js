@@ -3,10 +3,10 @@ import axios from "axios";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-const Form = ({ values, touched, errors, status }) => {
-    const [form, setForm] = useState([])
+const OnBoarding = ({ values, touched, errors, status }) => {
+    const [person, setPerson] = useState([])
     useEffect(() => {
-        status && setForm(form => [...form, status])
+        status && setPerson(person => [...person, status])
     }, [status])
     return (
         <div className="on-boarding">
@@ -43,6 +43,41 @@ const Form = ({ values, touched, errors, status }) => {
                 </label>
                 <button type="submit">Submit</button>
             </Form>
+            {/* {person.map(imput => (
+                <ul key={imput.id}>
+                    <li>Full Name: {input.fullName}</li>
+                    <li>E-mail: {input.email}</li>
+                    <li>password: {input.password}</li>
+                    <li>Job Title: {inputs.jobRole}</li>
+                </ul>
+            ))} */}
         </div>
-    )
-}
+    );
+};
+const FormikOnBording = withFormik({
+    mapPropsToValues({ fullName, email, password, aggreement, jobRole }) {
+        return {
+            fullName: fullName || "",
+            email: email || "",
+            password: password || " ",
+            aggreement: aggreement || false,
+            jobRole: jobRole || ""
+        };
+    },
+    validationSchema: Yup.object().shape({
+        fullName: Yup.string().required(),
+        email: Yup.string().required(),
+        password: Yup.string().required(),
+        aggreement: Yup.bool(true).required(),
+        diet: Yup.string()
+            .oneOf(["team-lead", "full-stack-dev", "other"])
+            .required("Select an Option")
+    }),
+    handleSubmit(values, { setStatus }) {
+        axios.post('https://reqres.in/api/users/', values)
+            .then(res => { setStatus(res.data); })
+            .catch(err => console.log(err.response));
+    }
+})(OnBoarding);
+export default FormikOnBording;
+console.log(FormikOnBording);
