@@ -5,9 +5,10 @@ import * as Yup from "yup";
 
 const OnBoarding = ({ values, touched, errors, status }) => {
     const [person, setPerson] = useState([])
+    // console.log(person)
     useEffect(() => {
-        status && setPerson(person => [...person, status])
-    }, [status])
+        status && setPerson(person => [...person, status]);
+    }, [status]);
     return (
         <div className="on-boarding">
             <Form>
@@ -15,7 +16,7 @@ const OnBoarding = ({ values, touched, errors, status }) => {
                 {touched.fullName && errors.fullName && (
                     <p className="error">{errors.fullName}</p>
                 )}
-                <Field type="text" name="email" placeholder="e.g. jdoe@email.com" />
+                <Field type="text" name="email" placeholder="E-mail eg. jdoe@email.com" />
                 {touched.email && errors.email && (
                     <p className="error">{errors.email}</p>
                 )}
@@ -23,14 +24,14 @@ const OnBoarding = ({ values, touched, errors, status }) => {
                 {touched.password && errors.password && (
                     <p className="error">{errors.password}</p>
                 )}
-                <Field type="text" name="role" placeholder="Select Option" />
                 <Field component="select" className="role-select" name="jobRole">
                     <option>Choose an option</option>
                     <option value="team-lead">Team Lead</option>
                     <option value="full-stack-dev">Full Stack Developer</option>
                     <option value="other">Other</option>
                 </Field>
-                {touched.jobRole && errors.jobRole && <p className="error">{errors.jobRole}</p>}
+                {touched.jobRole && errors.jobRole && (
+                    <p className="error">{errors.jobRole}</p>)}
                 <label className="checkbox-container">
                     {" "}
                     Terms of Service
@@ -43,33 +44,33 @@ const OnBoarding = ({ values, touched, errors, status }) => {
                 </label>
                 <button type="submit">Submit</button>
             </Form>
-            {/* {person.map(imput => (
-                <ul key={imput.id}>
+            {person.map(input => (
+                < ul key={input.id} >
                     <li>Full Name: {input.fullName}</li>
                     <li>E-mail: {input.email}</li>
                     <li>password: {input.password}</li>
-                    <li>Job Title: {inputs.jobRole}</li>
+                    <li>Job Title: {input.jobRole}</li>
                 </ul>
-            ))} */}
-        </div>
+            ))}
+        </div >
     );
 };
-const FormikOnBording = withFormik({
+const FormikOnBoarding = withFormik({
     mapPropsToValues({ fullName, email, password, aggreement, jobRole }) {
         return {
             fullName: fullName || "",
             email: email || "",
-            password: password || " ",
+            password: password || "",
             aggreement: aggreement || false,
-            jobRole: jobRole || ""
+            jobRole: jobRole || "",
         };
     },
     validationSchema: Yup.object().shape({
         fullName: Yup.string().required(),
         email: Yup.string().required(),
         password: Yup.string().required(),
-        aggreement: Yup.bool(true).required(),
-        diet: Yup.string()
+        // aggreement: Yup.bool(true).required(),
+        jobRole: Yup.string()
             .oneOf(["team-lead", "full-stack-dev", "other"])
             .required("Select an Option")
     }),
@@ -79,5 +80,5 @@ const FormikOnBording = withFormik({
             .catch(err => console.log(err.response));
     }
 })(OnBoarding);
-export default FormikOnBording;
-console.log(FormikOnBording);
+export default FormikOnBoarding;
+// console.log(FormikOnBording);
